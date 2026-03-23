@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.jeevanshunarang.com)",
+      "mcp__claude_ai_Figma__get_screenshot",
+      "Bash(npm run:*)",
+      "WebFetch(domain:kidsuper.world)",
+      "Bash(python3:*)",
+      "WebFetch(domain:www.yingwliu.com)",
+      "WebFetch(domain:saividyasrigiridharan.com)",
+      "WebFetch(domain:www.rachelchen.tech)"
+    ]
+  }
+}

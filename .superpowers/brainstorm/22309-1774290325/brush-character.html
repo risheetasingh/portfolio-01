@@ -1,0 +1,96 @@
+<h2>How should the brush stroke feel?</h2>
+<p class="subtitle">This is the character of each stamp the shader places. Fast vs slow movement will affect size/opacity in all options.</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="height:150px;overflow:hidden;border-radius:6px;background:#f0ece5;position:relative;">
+      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <!-- Smooth gaussian strokes -->
+        <defs>
+          <radialGradient id="g1" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#3c3228" stop-opacity="0.9"/>
+            <stop offset="55%" stop-color="#3c3228" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#3c3228" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="g2" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#3c3228" stop-opacity="0.85"/>
+            <stop offset="60%" stop-color="#3c3228" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#3c3228" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <ellipse cx="25%" cy="55%" rx="52" ry="38" fill="url(#g1)"/>
+        <ellipse cx="48%" cy="42%" rx="48" ry="34" fill="url(#g2)"/>
+        <ellipse cx="70%" cy="60%" rx="55" ry="36" fill="url(#g1)"/>
+        <ellipse cx="88%" cy="38%" rx="44" ry="30" fill="url(#g2)"/>
+      </svg>
+      <div style="position:absolute;bottom:8px;right:10px;font-size:10px;color:rgba(60,50,40,0.3);font-style:italic;">gaussian falloff</div>
+    </div>
+    <div class="card-body">
+      <h3>Soft round (current, upgraded)</h3>
+      <p>Smooth radial gradient stamp. Looks polished, predictable. Your current makeBrush() — but in GLSL it gets noise displacement on the edges for organic softness.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="height:150px;overflow:hidden;border-radius:6px;background:#f0ece5;position:relative;">
+      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="bristle">
+            <feTurbulence type="fractalNoise" baseFrequency="0.04 0.08" numOctaves="4" seed="2"/>
+            <feDisplacementMap in="SourceGraphic" scale="18" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+          <radialGradient id="gb1" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#3c3228" stop-opacity="1"/>
+            <stop offset="70%" stop-color="#3c3228" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#3c3228" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <g filter="url(#bristle)">
+          <ellipse cx="25%" cy="58%" rx="48" ry="28" fill="url(#gb1)"/>
+          <ellipse cx="50%" cy="44%" rx="52" ry="26" fill="url(#gb1)"/>
+          <ellipse cx="74%" cy="58%" rx="46" ry="30" fill="url(#gb1)"/>
+        </g>
+      </svg>
+      <div style="position:absolute;bottom:8px;right:10px;font-size:10px;color:rgba(60,50,40,0.3);font-style:italic;">noise-displaced edges</div>
+    </div>
+    <div class="card-body">
+      <h3>Dry brush / bristle</h3>
+      <p>Turbulence noise displaces the stroke boundary. Edges are ragged, textural — like a dry-loaded brush dragged across canvas. More tactile, more raw.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="height:150px;overflow:hidden;border-radius:6px;background:#f0ece5;position:relative;">
+      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="ink">
+            <feTurbulence type="turbulence" baseFrequency="0.02 0.05" numOctaves="3" seed="5"/>
+            <feDisplacementMap in="SourceGraphic" scale="28" xChannelSelector="R" yChannelSelector="G"/>
+            <feGaussianBlur stdDeviation="1.5"/>
+          </filter>
+          <linearGradient id="gi1" x1="0%" y1="50%" x2="100%" y2="60%">
+            <stop offset="0%" stop-color="#3c3228" stop-opacity="0"/>
+            <stop offset="20%" stop-color="#3c3228" stop-opacity="0.9"/>
+            <stop offset="75%" stop-color="#3c3228" stop-opacity="0.8"/>
+            <stop offset="100%" stop-color="#3c3228" stop-opacity="0.1"/>
+          </linearGradient>
+        </defs>
+        <g filter="url(#ink)">
+          <ellipse cx="42%" cy="50%" rx="130" ry="22" fill="url(#gi1)"/>
+          <ellipse cx="55%" cy="65%" rx="110" ry="18" fill="url(#gi1)" opacity="0.7"/>
+        </g>
+      </svg>
+      <div style="position:absolute;bottom:8px;right:10px;font-size:10px;color:rgba(60,50,40,0.3);font-style:italic;">directional smear</div>
+    </div>
+    <div class="card-body">
+      <h3>Ink wash / velocity smear</h3>
+      <p>Stroke shape stretches in the direction of mouse movement. Slow = round blob; fast = elongated smear with feathered tail. Feels most alive and responsive.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="section" style="margin-top:24px;padding:16px;background:rgba(0,0,0,0.03);border-radius:8px;border-left:3px solid rgba(0,0,0,0.1);">
+  <p style="margin:0;font-size:13px;color:#666;"><strong>Note:</strong> In all options, moving faster makes a wider/lighter stroke. Moving slowly makes a denser, more opaque reveal. This velocity response is baked into the GLSL shader.</p>
+</div>

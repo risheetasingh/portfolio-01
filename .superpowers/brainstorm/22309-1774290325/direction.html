@@ -1,0 +1,30 @@
+<h2>What's the goal here?</h2>
+<p class="subtitle">You already have a canvas brush-reveal hero. KidSuper does something similar but with WebGL shaders. Which direction do we go?</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Upgrade the existing effect</h3>
+      <p>Keep the brush-reveal concept but make it feel more like KidSuper — richer textures, smoother stroke interpolation, maybe ink/paint aesthetics. Stay on Canvas 2D (no WebGL).</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Rebuild with WebGL shaders</h3>
+      <p>Port to Three.js / react-three-fiber with GLSL shaders — proper displacement maps, brush noise, animated reveal. Higher fidelity, closer to the actual KidSuper technique.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Different effect entirely</h3>
+      <p>Inspired by KidSuper but not the same — use it as a jumping-off point for something original. Could be a completely different interaction paradigm.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .option { cursor: pointer; }
+</style>
