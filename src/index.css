@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   --bg: #ffffff;
   --bg-secondary: #f7f7f5;
@@ -23,6 +25,28 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E60023;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #cc001f;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #E60023 transparent;
 }
 
 html {
@@ -55,11 +79,20 @@ body {
   left: 0;
   right: 0;
   z-index: 100;
+  padding: 24px 48px;
+  transition: background 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease;
+  border-bottom: 1px solid transparent;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 48px;
   background: transparent;
+}
+
+.nav--scrolled {
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom-color: var(--border);
 }
 
 .nav-wordmark {
@@ -101,7 +134,7 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--text-dim);
+  color: #E60023;
   display: flex;
   align-items: center;
   padding: 4px;
@@ -109,7 +142,7 @@ body {
 }
 
 .theme-toggle:hover {
-  color: var(--text-primary);
+  color: #E60023;
 }
 
 /* ── Hero ──────────────────────────────────────── */
@@ -487,64 +520,143 @@ body {
   border-color: var(--text-primary);
 }
 
-/* ── Contact ───────────────────────────────────── */
+/* ── Footer ────────────────────────────────────── */
 
-.contact {
-  padding: 120px 48px 160px;
+.footer {
+  position: relative;
   border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  overflow: hidden;
+}
+
+.footer-ascii-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  cursor: crosshair;
+}
+
+.footer-content {
+  position: relative;
+  z-index: 1;
+  padding: 48px 48px 48px;
+}
+
+.footer-inner {
+  display: flex;
+  gap: 48px;
+  padding-bottom: 64px;
+}
+
+
+.footer-col {
+  flex: 1;
+}
+
+.footer-col--center {
   text-align: center;
 }
 
-.contact-inner {
-  max-width: 800px;
-  margin: 0 auto;
+.footer-col--right {
+  text-align: right;
 }
 
-.contact-heading {
-  font-size: clamp(40px, 5.5vw, 72px);
-  font-weight: 300;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-  color: var(--text-primary);
-  margin-bottom: 48px;
-}
-
-.contact-email {
-  display: inline-block;
-  font-size: clamp(20px, 2.5vw, 32px);
-  font-weight: 300;
-  letter-spacing: -0.01em;
-  color: var(--text-primary);
-  text-decoration: none;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 4px;
-  transition: border-color 0.2s;
-  margin-bottom: 48px;
-}
-
-.contact-email:hover {
-  border-color: var(--text-primary);
-}
-
-.contact-socials {
-  display: flex;
-  justify-content: center;
-  gap: 32px;
-  list-style: none;
-}
-
-.contact-socials a {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
+.footer-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-dim);
+  margin-bottom: 20px;
+}
+
+.footer-email {
+  font-family: var(--mono);
+  font-size: clamp(14px, 1.6vw, 20px);
+  color: var(--text-primary);
+  text-decoration: none;
+  line-height: 1.5;
+  transition: color 0.2s;
+}
+
+.footer-email:hover {
+  color: #E60023;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-links a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
   text-decoration: none;
   transition: color 0.2s;
 }
 
-.contact-socials a:hover {
+.footer-links a:hover {
+  color: #E60023;
+}
+
+.footer-icons {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+.footer-icons a {
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+
+.footer-icons a:hover {
   color: var(--text-primary);
+}
+
+.footer-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
+.footer-status {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 120px;
+  padding: 24px 0 32px;
+  border-top: 1px solid var(--border);
+}
+
+.footer-tagline {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  line-height: 1.6;
+  max-width: 480px;
+}
+
+.footer-copy {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
 }
 
 /* ── Hero (Discovery) ──────────────────────────── */
@@ -1369,6 +1481,31 @@ body {
   letter-spacing: 0.01em;
 }
 
+/* ── Case Study: Media borders + edge crop ───────── */
+
+.cs-section img {
+  display: block;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #e2e1de;
+}
+
+/* Video wrapper: border lives here so it isn't clipped */
+.cs-section .video-wrap {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e2e1de;
+  position: relative;
+}
+
+/* Scale video slightly so dark recording edges are hidden by overflow:hidden */
+.cs-section .video-wrap video {
+  display: block;
+  width: 100%;
+  transform: scale(1.015);
+  transform-origin: center center;
+}
+
 /* ── Case Study: Mock caption ────────────────────── */
 
 .cs-mock-caption {
@@ -2077,7 +2214,27 @@ body {
     padding: 56px 24px 80px;
   }
 
-  .contact {
-    padding: 80px 24px 100px;
+  .footer-content {
+    padding: 56px 24px 0;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  .footer-col--center,
+  .footer-col--right {
+    text-align: left;
+  }
+
+  .footer-links {
+    align-items: flex-start;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
 }

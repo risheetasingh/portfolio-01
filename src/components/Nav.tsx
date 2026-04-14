@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 type Theme = 'light' | 'dark'
@@ -10,6 +11,14 @@ interface NavProps {
 export default function Nav({ theme, toggleTheme }: NavProps) {
   const location = useLocation()
   const isPortfolio = location.pathname === '/'
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const scrollTo = (id: string) => {
     if (isPortfolio) {
@@ -18,13 +27,18 @@ export default function Nav({ theme, toggleTheme }: NavProps) {
   }
 
   return (
-    <nav className="nav">
-      <Link to="/" className="nav-wordmark">PD —</Link>
+    <nav className={`nav${scrolled ? ' nav--scrolled' : ''}`}>
+      <Link to="/" className="nav-wordmark">RS —</Link>
       <div className="nav-right">
         <ul className="nav-links">
-          <li><a href="#work" onClick={e => { e.preventDefault(); scrollTo('work') }}>Work</a></li>
+          <li>
+            {isPortfolio
+              ? <a href="#work" onClick={e => { e.preventDefault(); scrollTo('work') }}>Work</a>
+              : <Link to="/#work" onClick={() => { setTimeout(() => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' }), 100) }}>Work</Link>
+            }
+          </li>
           <li><Link to="/about">About</Link></li>
-          <li><a href="#contact" onClick={e => { e.preventDefault(); scrollTo('contact') }}>Contact</a></li>
+          <li><a href="mailto:risheetas.design@gmail.com">Contact</a></li>
         </ul>
         <button
           className="theme-toggle"

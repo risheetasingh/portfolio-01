@@ -12,6 +12,7 @@ import Jordy from './pages/Jordy'
 import Axis from './pages/Axis'
 import AxisB2C from './pages/AxisB2C'
 import AboutPage from './pages/AboutPage'
+import AetherFlowDemo from './pages/AetherFlowDemo'
 import './App.css'
 
 type Theme = 'light' | 'dark'
@@ -27,7 +28,7 @@ function Portfolio({ theme, toggleTheme }: { theme: Theme; toggleTheme: () => vo
   return (
     <motion.div {...pageTransition}>
       <Nav theme={theme} toggleTheme={toggleTheme} />
-      <Hero />
+      <Hero theme={theme} />
       <Work />
       <About compact />
       <Contact />
@@ -66,6 +67,7 @@ function App() {
               <Route path="/work/axis" element={<Axis theme={theme} toggleTheme={toggleTheme} />} />
               <Route path="/work/axis-b2c" element={<AxisB2C theme={theme} toggleTheme={toggleTheme} />} />
               <Route path="/about" element={<AboutPage theme={theme} toggleTheme={toggleTheme} />} />
+              <Route path="/demo/aether-flow" element={<AetherFlowDemo />} />
             </Routes>
           </AnimatePresence>
         </motion.div>

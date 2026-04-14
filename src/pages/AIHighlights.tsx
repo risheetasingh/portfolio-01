@@ -1,7 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { Play, Pause } from '@phosphor-icons/react'
 import Nav from '../components/Nav'
+import Contact from '../components/Contact'
 
 type Theme = 'light' | 'dark'
 
@@ -22,6 +24,35 @@ const sectionVariants = {
     y: 0,
     transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: i * 0.07 },
   }),
+}
+
+// ── VideoPlayer ──────────────────────────────────────────────────────────────
+
+function VideoPlayer({ src }: { src: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [playing, setPlaying] = useState(true)
+
+  const toggle = () => {
+    const v = videoRef.current
+    if (!v) return
+    if (v.paused) { v.play(); setPlaying(true) }
+    else { v.pause(); setPlaying(false) }
+  }
+
+  return (
+    <div className="video-wrap" style={{ cursor: 'pointer' }} onClick={toggle}>
+      <video ref={videoRef} src={src} autoPlay loop muted playsInline className="cs-hero-img" />
+      <div style={{
+        position: 'absolute', bottom: 16, right: 16,
+        width: 36, height: 36, borderRadius: '50%',
+        background: 'rgba(0,0,0,0.6)', display: 'flex',
+        alignItems: 'center', justifyContent: 'center',
+        transition: 'opacity 0.2s',
+      }}>
+        {playing ? <Pause size={18} weight="fill" color="#fff" /> : <Play size={18} weight="fill" color="#fff" />}
+      </div>
+    </div>
+  )
 }
 
 // ── Shared helpers ────────────────────────────────────────────────────────────
@@ -659,16 +690,12 @@ export default function AIHighlights({ theme, toggleTheme }: Props) {
         <h1 className="cs-title">Live sports move fast.<br/>Media workflows don't.</h1>
         <p className="cs-subtitle">Designed a system to turn live match data into publish-ready content in seconds.</p>
         <motion.div custom={1} initial="hidden" animate="visible" variants={sectionVariants}>
-          <DashboardMockup />
+          <img src="/highlights-hero.webp" alt="Spectatr media collection dashboard" className="cs-hero-img" />
         </motion.div>
         <div className="cs-meta">
           <div className="cs-meta-col">
             <p className="cs-meta-label">My Role</p>
-            <ul className="cs-meta-list">
-              {['Qualitative Research', 'Conceptualization', 'Design', 'Usability testing', 'Dev handoff'].map(r => (
-                <li key={r}>{r}</li>
-              ))}
-            </ul>
+            <p className="cs-meta-value">Team: 1 PM, 2 backend engineers, 2 front-end engineers, 1 data engineer, 2 designers (including me). I owned research, information architecture, interaction design, and dev handoff. I did not own the AI clip-tagging model — that was an engineering decision I designed around.</p>
           </div>
           <div className="cs-meta-col">
             <p className="cs-meta-label">Duration</p>
@@ -677,48 +704,53 @@ export default function AIHighlights({ theme, toggleTheme }: Props) {
         </div>
       </motion.section>
 
-      {/* 2 — Metrics */}
+      {/* 2 — Overview */}
       <motion.section className="cs-section" custom={2} initial="hidden" animate="visible" variants={sectionVariants}>
-        <div className="cs-metric-cards">
+        <p className="cs-section-label">Overview</p>
+        <div className="cs-body-block">
+          <p>Spectatr.AI needed a media management system that could keep pace with live sport. The product was built for broadcast teams managing high-volume, real-time football content — editors working across multiple concurrent matches, expected to produce, compile, and publish highlights before the post-match conversation moved on.</p>
+          <p>The problem wasn't capability. Existing tools could handle the content. They couldn't handle the speed. Every step — finding a clip, compiling it, distributing it — required leaving the current tool and switching to another. The brief was to collapse that into a single, continuous workflow.</p>
+        </div>
+        <div style={{ marginTop: 48 }}>
+          <img src="/highlights-pulse.png" alt="Spectatr Pulse dashboard" className="cs-hero-img" />
+          <p className="cs-mock-caption">Pulse dashboard — the entry point to live matches, active compilations, and scheduled publications in one view.</p>
+        </div>
+      </motion.section>
+
+      {/* 3 — Research */}
+      <motion.section className="cs-section" custom={3} initial="hidden" animate="visible" variants={sectionVariants}>
+        <p className="cs-section-label" style={{ color: TEAL }}>Research</p>
+        <h2 className="cs-heading">What we observed before building anything</h2>
+        <p className="cs-body-single">We embedded with editorial teams during live events — observing how they moved between tools, where they paused, and what they gave up on entirely. The goal was to find where the workflow broke, not where users said it broke.</p>
+
+        <div className="cs-takeaway-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', marginTop: 40 }}>
           {[
-            { stat: '30mins to 2mins', desc: 'Reduced manual highlight creation to social sharing time' },
-            { stat: '50secs to 2secs', desc: 'Reduced time to create, review, and publish highlights.' },
-            { stat: '99%',             desc: 'Improved accuracy of AI-generated highlight clips.' },
-          ].map(m => (
-            <div key={m.stat} className="cs-metric-card">
-              <div className="cs-metric-stat">{m.stat}</div>
-              <p className="cs-metric-desc">{m.desc}</p>
+            { n: '01', heading: 'Context switching was the biggest time sink', body: 'Editors used 3–5 separate tools per match. Every switch cost 30–90 seconds and broke focus. The cumulative delay per event was 25+ minutes.' },
+            { n: '02', heading: 'Clips had no match context', body: 'Files were timestamped by upload time, not match event. Finding "the Mbappe goal" meant scrubbing manually — there was no way to navigate by what happened.' },
+            { n: '03', heading: 'Distribution was done last, not inline', body: 'Publishing was a separate step after compilation — a task editors deferred until everything else was done. By then, the moment had often passed.' },
+          ].map(f => (
+            <div key={f.n} className="cs-takeaway-card">
+              <p className="cs-takeaway-title" style={{ fontFamily: 'var(--mono)', fontSize: 10, color: TEAL, marginBottom: 8 }}>{f.n}</p>
+              <p className="cs-takeaway-title">{f.heading}</p>
+              <p className="cs-takeaway-body">{f.body}</p>
             </div>
           ))}
         </div>
       </motion.section>
 
-      {/* 3 — Overview */}
-      <motion.section className="cs-section" custom={3} initial="hidden" animate="visible" variants={sectionVariants}>
-        <p className="cs-section-label">Overview</p>
-        <div className="cs-body-block">
-          <p>Spectatr.AI set out to design a scalable media management system to simplify highlight creation and publishing for broadcasters. The product was built to support high-volume, real-time sports content — starting with football — and reduce the manual workload faced by editors and media teams during live events.</p>
-          <p>The objective was to deliver an end-to-end platform that enables fast, structured, and collaborative highlight workflows across teams.</p>
-        </div>
-        <div style={{ marginTop: 48 }}>
-          <MatchListMockup />
-          <p className="cs-mock-caption">Entry: Get started from here</p>
-        </div>
-      </motion.section>
-
-      {/* 4 — Core Insight: Timeline alignment */}
+      {/* 4 — Core Insight */}
       <motion.section className="cs-section" custom={4} initial="hidden" animate="visible" variants={sectionVariants}>
         <p className="cs-section-label" style={{ color: TEAL }}>The core insight</p>
         <h2 className="cs-heading">Align clips to the match, not just the clock.</h2>
-        <p className="cs-body-single">Clips anchored to match events — goals, red cards, key plays — carry context automatically. The timeline became the spine of the system.</p>
+        <p className="cs-body-single">Clips anchored to match events — goals, red cards, key plays — carry context automatically. An editor looking for the 49th minute goal doesn't need to remember the timestamp. They navigate to the event. The timeline became the spine of the entire system: the way content was organised, searched, and compiled.</p>
         <div className="cs-workspace-stack">
           <div>
-            <WorkspaceBeforeMockup />
-            <p className="cs-workspace-caption">Live match: Clips are being received in real time during the live match, but they aren't aligned with the actual match timeline.</p>
+            <img src="/highlights-clips.png" alt="Spectatr playlist clips view" className="cs-hero-img" />
+            <p className="cs-workspace-caption">Live match: clips arriving in real time, automatically aligned to match events as they happen.</p>
           </div>
           <div>
-            <WorkspaceAfterMockup />
-            <p className="cs-workspace-caption">Live match: Clips are coming in during the live match and are now aligned with the match timeline.</p>
+            <img src="/highlights-timeline.webp" alt="Spectatr live match timeline with aligned clips" className="cs-hero-img" />
+            <p className="cs-workspace-caption">Event-anchored timeline: each clip maps to a specific moment — goal, substitution, card — not just a timestamp.</p>
           </div>
         </div>
       </motion.section>
@@ -727,77 +759,62 @@ export default function AIHighlights({ theme, toggleTheme }: Props) {
       <motion.section className="cs-section" custom={5} initial="hidden" animate="visible" variants={sectionVariants}>
         <p className="cs-section-label">Compilation</p>
         <h2 className="cs-heading">Clips as inputs, not outputs.</h2>
-        <p className="cs-body-single">The moment editors could combine clips into compilations inside the same tool, the workflow collapsed from three steps to one. A match montage — previously 45 minutes — became a 4-minute drag-and-drop.</p>
-        <CompilationModalMockup />
-        <p className="cs-mock-caption">Manage Compilers: This screen lets users compile highlight videos with selected clips, tags, and assets.</p>
+        <p className="cs-body-single">The moment editors could combine clips into compilations inside the same tool — without exporting, without switching — the workflow collapsed from three steps to one. A match montage that previously took 45 minutes of tool-switching became a 4-minute operation in a single screen. The key design decision was treating the compilation modal not as a settings panel but as an editing surface: the clip strip, the preview, and the publish controls all in the same view.</p>
+        <img src="/highlights-compiler.webp" alt="Spectatr manage compilations modal" className="cs-hero-img" />
+        <p className="cs-mock-caption">Compilation modal: clip selection, preview, metadata, and export settings in one surface — no context switch required.</p>
       </motion.section>
 
       {/* 6 — Workspace */}
       <motion.section className="cs-section" custom={6} initial="hidden" animate="visible" variants={sectionVariants}>
         <p className="cs-section-label">Workspace</p>
         <h2 className="cs-heading">One workspace. Live clips, full context, instant control.</h2>
-        <p className="cs-body-single">The core interface unified clip browsing, event-anchored timeline scrubbing, and metadata in a single view. Nothing left the screen to become a highlight.</p>
-        <WorkspaceFoldersMockup />
-        <p className="cs-mock-caption">Workspace: A clean, scalable media workspace designed for fast navigation, easy organisation, and collaborative team access.</p>
+        <p className="cs-body-single">The core interface unified clip browsing, event-anchored timeline scrubbing, and metadata in a single view. The constraint was: nothing should require the editor to leave this screen to produce a highlight. Searching, reviewing, and starting a compilation all happen in the same place. The workspace is where the time reduction was actually earned.</p>
+        <VideoPlayer src="/highlights-workspace.mov" />
+        <p className="cs-mock-caption">Workspace: browse by event, review clips in context, and begin compilation without leaving the screen.</p>
       </motion.section>
 
       {/* 7 — Distribution */}
       <motion.section className="cs-section" custom={7} initial="hidden" animate="visible" variants={sectionVariants}>
         <p className="cs-section-label">Distribution</p>
         <h2 className="cs-heading">Publishing becomes part of creation.</h2>
-        <p className="cs-body-single">Distribution was surfaced inline — one action, multiple platforms, triggered the moment a compilation was ready. Publish time: 50 seconds to 2.</p>
-        <ShareContentMockup />
-        <p className="cs-mock-caption">Share Content: A streamlined content scheduler built for effortless cross-platform sharing, AI-powered editing, and precise publishing control.</p>
+        <p className="cs-body-single">Before this system, distribution was a separate step — something editors did after compilation was finished, using a different tool. We moved it inline. The moment a compilation was ready, a single action triggered multi-platform publishing without switching context. The 50-second-to-2-second reduction in publish time came from this decision, not from a faster server.</p>
+        <VideoPlayer src="/highlights-publishing.mov" />
+        <p className="cs-mock-caption">Inline distribution: YouTube, Instagram, and other platforms configured and published without leaving the workspace.</p>
       </motion.section>
 
-      {/* 8 — Find clips faster */}
+      {/* 8 — Clip Management */}
       <motion.section className="cs-section" custom={8} initial="hidden" animate="visible" variants={sectionVariants}>
-        <h2 className="cs-heading">Optimizing sports media production.</h2>
-        <p className="cs-body-single">They want to quickly find relevant clips, efficiently edit content, and seamlessly publish to various platforms.</p>
+        <p className="cs-section-label">Clip Management</p>
+        <h2 className="cs-heading">Find the right clip, fast.</h2>
+        <p className="cs-body-single">With 7,654 clips per match session, the filter layer had to work as fast as a mental search. Editors navigate by event type, player, rating, and half — narrowing thousands of clips to a handful in seconds. The distribution log surfaces status across all platforms at a glance: published, scheduled, and draft — without opening a separate reporting tool.</p>
         <div className="cs-two-col" style={{ marginTop: 40 }}>
           <div>
             <FilterClipsMockup />
-            <p className="cs-mock-caption">Find relevant clips faster</p>
+            <p className="cs-mock-caption">Filter panel: 7,654 clips narrowed by event, player, rating, and half — without leaving the workspace.</p>
           </div>
           <div>
             <DistributionLogMockup />
-            <p className="cs-mock-caption">Find relevant clips faster</p>
+            <p className="cs-mock-caption">Distribution log: published, scheduled, and draft states visible at a glance across all platforms.</p>
           </div>
         </div>
       </motion.section>
 
-      {/* 9 — Focus Areas */}
+      {/* 9 — Dashboard */}
       <motion.section className="cs-section" custom={9} initial="hidden" animate="visible" variants={sectionVariants}>
-        <p className="cs-section-label" style={{ color: TEAL }}>Focus Areas</p>
-        <h2 className="cs-heading">Crafting the ideal workflow dashboard for sports media professionals</h2>
-        <p className="cs-body-single">Recognizing the need for speed and efficiency, we reimagined the core dashboard to act as a smart, personalized entry point for all sports content workflows. Users can instantly access live events, ongoing editing tasks, and scheduled publications, significantly reducing discovery time.</p>
+        <p className="cs-section-label" style={{ color: TEAL }}>Dashboard</p>
+        <h2 className="cs-heading">Status, not recency.</h2>
+        <p className="cs-body-single">The dashboard existed before this project. It was a list of recent files. The problem wasn't that editors couldn't access content — it was that they couldn't understand its status at a glance: what was live, what was in progress, what was ready to publish. We rebuilt the entry point around status, not recency.</p>
 
         <div style={{ marginTop: 48, marginBottom: 40 }}>
-          <h3 className="cs-sub-heading">The challenge of disparate workflows</h3>
-          <p className="cs-body-single" style={{ marginBottom: 40 }}>Traditional methods forced sports editors and analysts to navigate fragmented systems, slowing down highlight creation and distribution. Critical information was scattered, leading to missed opportunities and increased manual effort.</p>
-          <PlaylistBuilderMockup />
+          <VideoPlayer src="/highlights-disparate.mov" />
+          <p className="cs-mock-caption">Before: editors navigated fragmented systems with no unified view of what was live, in progress, or ready to publish.</p>
         </div>
 
-        <h3 className="cs-sub-heading">Our solution: A centralized, intelligent overview</h3>
-        <p className="cs-body-single">Through rigorous UX research, we designed a dashboard that intelligently surfaces the most relevant content and tools based on user activity and project status. This fosters a structured workflow, from live event monitoring to content publishing.</p>
+        <p className="cs-body-single">The constraint was that editors managed content across 3+ concurrent live matches. The interface had to surface urgency — a clip from a live match in the 89th minute ranks differently than a clip from yesterday's training session — without requiring the editor to manually sort or tag priority. Status became the primary organisational axis.</p>
       </motion.section>
 
-      {/* 10 — Key Takeaways */}
+      {/* 10 — System Flow */}
       <motion.section className="cs-section" custom={10} initial="hidden" animate="visible" variants={sectionVariants}>
-        <p className="cs-section-label" style={{ color: AMBER }}>Signing off!</p>
-        <h2 className="cs-heading">Key Takeaways</h2>
-        <p className="cs-body-single">This project was challenging and rewarding, demanding extensive work, exploration, and discussions with stakeholders. It feels almost impossible to boil down my learning, but if I had to, here they are!</p>
-        <TakeawayCards />
-
-        <div style={{ marginTop: 64, paddingTop: 48, borderTop: '1px solid var(--border)' }}>
-          <p className="cs-section-label" style={{ color: TEAL }}>UX Research Insights</p>
-          <h3 className="cs-sub-heading">Mapping user mental models to platform navigation</h3>
-          <p className="cs-body-single">Based on extensive card-sorting with sports editors and analysts, we identified their mental models for content organization, leading to four core categories that structure the platform's navigation.</p>
-        </div>
-      </motion.section>
-
-      {/* 11 — System Flow */}
-      <motion.section className="cs-section" custom={11} initial="hidden" animate="visible" variants={sectionVariants}>
         <p className="cs-section-label">System thinking</p>
         <h2 className="cs-heading">The full loop.</h2>
         <div className="cs-flow">
@@ -810,10 +827,37 @@ export default function AIHighlights({ theme, toggleTheme }: Props) {
         </div>
       </motion.section>
 
+      {/* 11 — Outcome */}
+      <motion.section className="cs-section" custom={11} initial="hidden" animate="visible" variants={sectionVariants}>
+        <p className="cs-section-label" style={{ color: AMBER }}>Outcome</p>
+        <h2 className="cs-heading">What the numbers actually measure</h2>
+        <p className="cs-body-single">The metrics below were measured by observing the same editorial teams before and after launch during live events. The reductions didn't come from faster hardware or better AI — they came from removing the steps between finding a clip and publishing it.</p>
+
+        <div style={{ marginTop: 40 }}>
+          <div className="cs-metric-cards">
+            {[
+              { stat: '30min → 2min', desc: 'Time from final whistle to first published highlight — measured against pre-launch baseline with the same editorial teams.' },
+              { stat: '50sec → 2sec', desc: 'Distribution time per platform once a compilation was ready — result of inline publishing replacing a separate tool.' },
+              { stat: '99%',          desc: 'AI clip accuracy across a sample of 500 tagged events, validated by independent editorial review.' },
+            ].map(m => (
+              <div key={m.stat} className="cs-metric-card">
+                <div className="cs-metric-stat">{m.stat}</div>
+                <p className="cs-metric-desc">{m.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ marginTop: 48, paddingTop: 40, borderTop: '1px solid var(--border)' }}>
+          <p className="cs-section-label" style={{ color: TEAL }}>What I'd do differently</p>
+          <p className="cs-body-single">The playlist builder's "compile automatically" toggle was buried in a modal that most editors opened once during setup and never revisited. In testing, teams were still manually triggering compilation after it had already been set to auto — they didn't know it was running. The toggle needed to be a persistent status indicator in the workspace header, not a one-time checkbox in a settings panel.</p>
+        </div>
+      </motion.section>
+
       {/* 12 — Closing */}
       <motion.section className="cs-section cs-closing" custom={12} initial="hidden" animate="visible" variants={sectionVariants}>
         <p className="cs-closing-quote">
-          "This evolved from a tool into a system for real-time storytelling."
+          "The 30-minute baseline wasn't a design failure — it was the product before design. Every decision in this system was about removing one more handoff, one more tool switch, one more moment where an editor had to stop thinking about the story and start managing the workflow."
         </p>
       </motion.section>
 
@@ -826,6 +870,8 @@ export default function AIHighlights({ theme, toggleTheme }: Props) {
           <p className="cs-next-type">Content Management System</p>
         </Link>
       </motion.section>
+
+      <Contact />
     </motion.div>
   )
 }

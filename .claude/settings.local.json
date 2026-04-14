@@ -8,7 +8,15 @@
       "Bash(python3:*)",
       "WebFetch(domain:www.yingwliu.com)",
       "WebFetch(domain:saividyasrigiridharan.com)",
-      "WebFetch(domain:www.rachelchen.tech)"
+      "WebFetch(domain:www.rachelchen.tech)",
+      "WebFetch(domain:good-fella.com)",
+      "Bash(cp \"/Users/fanclash/Desktop/Screen Recording 2026-03-30 at 3.18.07 AM.mov\" \"/Users/fanclash/Documents/prototype-project-01/public/axis-upload.mov\")",
+      "Bash(cp \"/Users/fanclash/Desktop/Screen Recording 2026-03-30 at 3.25.19 AM.mov\" \"/Users/fanclash/Documents/prototype-project-01/public/axis-library.mov\")",
+      "Bash(cp \"/Users/fanclash/Desktop/Screen Recording 2026-03-30 at 3.28.01 AM.mov\" \"/Users/fanclash/Documents/prototype-project-01/public/axis-search.mov\")",
+      "Bash(cp \"Screen Recording 2026-03-30 at 3.18.07 AM.mov\" /Users/fanclash/Documents/prototype-project-01/public/axis-upload.mov)",
+      "Bash(cp \"Screen Recording 2026-03-30 at 3.25.19 AM.mov\" /Users/fanclash/Documents/prototype-project-01/public/axis-library.mov)",
+      "Bash(cp \"Screen Recording 2026-03-30 at 3.28.01 AM.mov\" /Users/fanclash/Documents/prototype-project-01/public/axis-search.mov)",
+      "Bash(xargs -0 ls)"
     ]
   }
 }

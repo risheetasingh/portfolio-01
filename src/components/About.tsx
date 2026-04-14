@@ -127,7 +127,7 @@ export default function About({ compact = false }: Props) {
             <a href="https://www.linkedin.com/in/risheeta-singh-aa9541141/" target="_blank" rel="noopener noreferrer" className="about-link">
               LinkedIn ↗
             </a>
-            <a href="/resume.docx" download="Risheeta Singh.docx" className="about-link">
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="about-link">
               Resume ↗
             </a>
           </motion.div>

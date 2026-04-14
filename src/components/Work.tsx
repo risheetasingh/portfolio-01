@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
+import { JordyPreview, HighlightsPreview, AxisPreview, AxisB2CPreview } from './WorkAnimations'
 
 const projects = [
   {
@@ -11,6 +12,7 @@ const projects = [
     type: 'Conversational AI Agent',
     bg: '#1a1a1a',
     accent: '#e8e4da',
+    preview: JordyPreview,
   },
   {
     title: "Live sports move fast. Media workflows don't.",
@@ -20,6 +22,7 @@ const projects = [
     type: 'Real-time Highlights System',
     bg: '#0d1a0f',
     accent: '#b8d4bb',
+    preview: HighlightsPreview,
   },
   {
     title: 'Designing a Scalable Content Intelligence System',
@@ -29,6 +32,7 @@ const projects = [
     type: 'Content Management System',
     bg: '#0f0f1a',
     accent: '#c4c0e8',
+    preview: AxisPreview,
   },
   {
     title: 'How People Find Moments Instantly',
@@ -38,6 +42,7 @@ const projects = [
     type: 'B2C Digital Asset Management',
     bg: '#1a100d',
     accent: '#e8c4b8',
+    preview: AxisB2CPreview,
   },
 ]
 
@@ -53,43 +58,83 @@ export default function Work() {
   const navigate = useNavigate()
   const p = projects[activeProject]
   const itemRefs = useRef<(HTMLLIElement | null)[]>([])
+  const sectionRef = useRef<HTMLElement>(null)
   const rightPanelRef = useRef<HTMLDivElement>(null)
+  const notchCenterRef = useRef(0.5)
 
-  // Compute rounded notch path — clip-path: path() uses absolute pixels
-  // so we recalculate on resize for a perfectly circular corner radius.
+  // Scroll-driven notch position
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end end'],
+  })
+  const notchCenter = useTransform(scrollYProgress, [0.15, 0.85], [0.20, 0.80])
+
+  const buildPath = useCallback(() => {
+    const panel = rightPanelRef.current
+    if (!panel) return
+    const { width: w, height: h } = panel.getBoundingClientRect()
+    const r      = 16     // outer corner radius
+    const nW     = w * 0.065  // notch depth
+    const rn     = 12     // notch corner radius
+    const center = notchCenterRef.current
+    const notchH = h * 0.30
+    const nT     = Math.max(r + rn + 10, h * center - notchH / 2)
+    const nB     = Math.min(h - r - rn - 10, h * center + notchH / 2)
+    const slant  = notchH * 0.12  // inward taper on each side
+
+    // Inner edge Y positions (trapezoid: narrower inside)
+    const nTi = nT + slant
+    const nBi = nB - slant
+
+    // Unit vectors along the slanted edges
+    const sLen = Math.sqrt(nW * nW + slant * slant)
+    const sUx  = nW / sLen       // horizontal component
+    const sUy  = slant / sLen    // vertical component
+
+    // Path goes clockwise. Notch traversed bottom→top (upward along left edge).
+    // Vertices: P4(0,nB) → P3(nW,nBi) → P2(nW,nTi) → P1(0,nT)
+    const d = [
+      `M ${r} 0`,
+      `H ${w - r}`, `Q ${w} 0 ${w} ${r}`,
+      `V ${h - r}`, `Q ${w} ${h} ${w - r} ${h}`,
+      `H ${r}`,     `Q 0 ${h} 0 ${h - r}`,
+      // Up left edge to P4 (bottom-left of notch)
+      `V ${nB + rn}`,
+      `Q 0 ${nB} ${rn * sUx} ${nB - rn * sUy}`,
+      // Slanted line up-right to near P3 (inner bottom-right)
+      `L ${nW - rn * sUx} ${nBi + rn * sUy}`,
+      `Q ${nW} ${nBi} ${nW} ${nBi - rn}`,
+      // Up inner edge to P2 (inner top-right)
+      `V ${nTi + rn}`,
+      `Q ${nW} ${nTi} ${nW - rn * sUx} ${nTi - rn * sUy}`,
+      // Slanted line up-left to near P1 (top-left of notch)
+      `L ${rn * sUx} ${nT + rn * sUy}`,
+      `Q 0 ${nT} 0 ${nT - rn}`,
+      // Continue up left edge
+      `V ${r}`, `Q 0 0 ${r} 0`,
+      `Z`,
+    ].join(' ')
+
+    panel.style.clipPath = `path('${d}')`
+  }, [])
+
+  // Subscribe to scroll-driven notch center changes
+  useEffect(() => {
+    return notchCenter.on('change', (v) => {
+      notchCenterRef.current = v
+      buildPath()
+    })
+  }, [notchCenter, buildPath])
+
+  // Rebuild clip-path on resize
   useEffect(() => {
     const panel = rightPanelRef.current
     if (!panel) return
-
-    const buildPath = () => {
-      const { width: w, height: h } = panel.getBoundingClientRect()
-      const r   = 16   // outer corner radius
-      const rn  = 8    // notch inner corner radius
-      const nW  = w * 0.055   // notch depth
-      const nT  = h * 0.38    // notch top Y
-      const nB  = h * 0.62    // notch bottom Y
-
-      const d = [
-        `M ${r} 0`,
-        `H ${w - r}`, `Q ${w} 0 ${w} ${r}`,
-        `V ${h - r}`, `Q ${w} ${h} ${w - r} ${h}`,
-        `H ${r}`,     `Q 0 ${h} 0 ${h - r}`,
-        `V ${nB + rn}`, `Q 0 ${nB} ${rn} ${nB}`,
-        `H ${nW - rn}`, `Q ${nW} ${nB} ${nW} ${nB - rn}`,
-        `V ${nT + rn}`, `Q ${nW} ${nT} ${nW - rn} ${nT}`,
-        `H ${rn}`,      `Q 0 ${nT} 0 ${nT - rn}`,
-        `V ${r}`,       `Q 0 0 ${r} 0`,
-        `Z`,
-      ].join(' ')
-
-      panel.style.clipPath = `path('${d}')`
-    }
-
     buildPath()
     const ro = new ResizeObserver(buildPath)
     ro.observe(panel)
     return () => ro.disconnect()
-  }, [])
+  }, [buildPath])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -101,7 +146,7 @@ export default function Work() {
           }
         })
       },
-      { rootMargin: '-30% 0px -30% 0px', threshold: 0 }
+      { rootMargin: '-40% 0px -40% 0px', threshold: 0 }
     )
     const refs = itemRefs.current
     refs.forEach(el => { if (el) observer.observe(el) })
@@ -117,7 +162,7 @@ export default function Work() {
   }
 
   return (
-    <section className="work" id="work">
+    <section className="work" id="work" ref={sectionRef}>
       <div className="work-inner">
         {/* Left */}
         <div className="work-left">
@@ -139,7 +184,7 @@ export default function Work() {
                   key={project.title}
                   ref={el => { itemRefs.current[i] = el }}
                   className={`work-item${activeProject === i ? ' active' : ''}${projectRoutes[project.title] ? ' linked' : ''}`}
-                  style={{ opacity, transition: 'opacity 0.4s ease' }}
+                  style={{ opacity, transition: 'opacity 0.45s ease' }}
                   onClick={() => handleProjectClick(project.title)}
                 >
                   <div className="work-item-header">
@@ -158,44 +203,46 @@ export default function Work() {
         {/* Right */}
         <div className="work-right">
           <div className="work-right-inner" ref={rightPanelRef}>
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="sync">
               <motion.div
                 key={activeProject}
                 className="work-visual-wrap"
-                initial={{ opacity: 0, scale: 0.97 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.97 }}
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.45, ease: 'easeInOut' }}
               >
                 <div
                   className="work-visual"
-                  style={{
-                    background: `linear-gradient(160deg, ${p.bg} 0%, ${p.accent}22 100%)`,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'flex-end',
-                    padding: '56px 64px',
-                  }}
+                  style={{ background: p.bg, position: 'relative', overflow: 'hidden' }}
                 >
-                  <div style={{
-                    fontFamily: 'var(--mono)',
-                    fontSize: '11px',
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                    color: p.accent,
-                    opacity: 0.5,
-                    marginBottom: '14px',
-                  }}>
-                    {p.type}
+                  {/* Animated preview */}
+                  <div style={{ position: 'absolute', inset: 0 }}>
+                    <p.preview />
                   </div>
+                  {/* Gradient + text overlay at bottom */}
                   <div style={{
-                    fontSize: '32px',
-                    fontWeight: 600,
-                    color: p.accent,
-                    lineHeight: 1.25,
-                    letterSpacing: '-0.02em',
+                    position: 'absolute', inset: 0,
+                    background: `linear-gradient(to bottom, transparent 40%, ${p.bg}dd 70%, ${p.bg} 88%)`,
+                    pointerEvents: 'none',
+                  }} />
+                  <div style={{
+                    position: 'absolute', bottom: 0, left: 0, right: 0,
+                    padding: '56px 64px', zIndex: 1,
                   }}>
-                    {p.headline}
+                    <div style={{
+                      fontFamily: 'var(--mono)', fontSize: '11px',
+                      letterSpacing: '0.12em', textTransform: 'uppercase',
+                      color: p.accent, opacity: 0.5, marginBottom: '14px',
+                    }}>
+                      {p.type}
+                    </div>
+                    <div style={{
+                      fontSize: '32px', fontWeight: 600,
+                      color: p.accent, lineHeight: 1.25, letterSpacing: '-0.02em',
+                    }}>
+                      {p.headline}
+                    </div>
                   </div>
                 </div>
               </motion.div>
