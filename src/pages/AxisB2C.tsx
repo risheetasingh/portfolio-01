@@ -20,7 +20,7 @@ const sectionVariants = {
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: i * 0.07 },
+    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as any, delay: i * 0.07 },
   }),
 }
 
@@ -108,7 +108,7 @@ export default function AxisB2C({ theme, toggleTheme }: Props) {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.98 }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] as any }}
     >
       <Nav theme={theme} toggleTheme={toggleTheme} />
 

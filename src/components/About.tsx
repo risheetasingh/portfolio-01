@@ -5,7 +5,7 @@ const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
-  transition: { duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] },
+  transition: { duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] as any },
 })
 
 interface Props {
@@ -47,7 +47,7 @@ export default function About({ compact = false }: Props) {
             initial={{ opacity: 0, scale: 0.97 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] as any }}
           >
             <img
               src="/risheeta.jpg"

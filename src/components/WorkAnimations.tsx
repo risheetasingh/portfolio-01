@@ -359,7 +359,7 @@ export function HighlightsPreview() {
     <GlassPanel bg="#051209" orbs={HIGHLIGHTS_ORBS}>
       {scene === 0 ? (
         // Scene 0: live timeline clips arriving
-        <div style={{ opacity: showSetup && phase !== 'exit' ? 1 : 0, transition: 'opacity 0.4s ease', marginBottom: 12 }}>
+        <div style={{ opacity: showSetup ? 1 : 0, transition: 'opacity 0.4s ease', marginBottom: 12 }}>
           {/* LIVE badge */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
             <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#ef4444', display: 'inline-block', boxShadow: '0 0 6px #ef4444' }} />
@@ -382,7 +382,7 @@ export function HighlightsPreview() {
         </div>
       ) : (
         // Scene 1: compile action
-        <div style={{ opacity: showSetup && phase !== 'exit' ? 1 : 0, transition: 'opacity 0.4s ease', marginBottom: 12 }}>
+        <div style={{ opacity: showSetup ? 1 : 0, transition: 'opacity 0.4s ease', marginBottom: 12 }}>
           <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: '#64748b', marginBottom: 10 }}>3 clips selected</div>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
