@@ -16,7 +16,11 @@
       "Bash(cp \"Screen Recording 2026-03-30 at 3.18.07 AM.mov\" /Users/fanclash/Documents/prototype-project-01/public/axis-upload.mov)",
       "Bash(cp \"Screen Recording 2026-03-30 at 3.25.19 AM.mov\" /Users/fanclash/Documents/prototype-project-01/public/axis-library.mov)",
       "Bash(cp \"Screen Recording 2026-03-30 at 3.28.01 AM.mov\" /Users/fanclash/Documents/prototype-project-01/public/axis-search.mov)",
-      "Bash(xargs -0 ls)"
+      "Bash(xargs -0 ls)",
+      "WebFetch(domain:daksh-singh-ten.vercel.app)",
+      "WebFetch(domain:pranayshukla.framer.website)",
+      "WebFetch(domain:itsdeesha.framer.website)",
+      "WebFetch(domain:juanmora.co)"
     ]
   }
 }
