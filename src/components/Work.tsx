@@ -55,10 +55,8 @@ const projectRoutes: Record<string, string> = {
 
 export default function Work() {
   const [activeProject, setActiveProject] = useState(0)
-  const [hoveredProject, setHoveredProject] = useState<number | null>(null)
-  const displayProject = hoveredProject !== null ? hoveredProject : activeProject
   const navigate = useNavigate()
-  const p = projects[displayProject]
+  const p = projects[activeProject]
   const itemRefs = useRef<(HTMLLIElement | null)[]>([])
   const sectionRef = useRef<HTMLElement>(null)
   const rightPanelRef = useRef<HTMLDivElement>(null)
@@ -179,13 +177,14 @@ export default function Work() {
           </motion.p>
           <ul className="work-list">
             {projects.map((project, i) => {
+              const distance = Math.abs(i - activeProject)
+              const opacity = distance === 0 ? 1 : distance === 1 ? 0.3 : 0.15
               return (
                 <li
                   key={project.title}
                   ref={el => { itemRefs.current[i] = el }}
                   className={`work-item${activeProject === i ? ' active' : ''}${projectRoutes[project.title] ? ' linked' : ''}`}
-                  onMouseEnter={() => setHoveredProject(i)}
-                  onMouseLeave={() => setHoveredProject(null)}
+                  style={{ opacity, transition: 'opacity 0.45s ease' }}
                   onClick={() => handleProjectClick(project.title)}
                 >
                   <div className="work-item-header">
@@ -206,7 +205,7 @@ export default function Work() {
           <div className="work-right-inner" ref={rightPanelRef}>
             <AnimatePresence mode="sync">
               <motion.div
-                key={displayProject}
+                key={activeProject}
                 className="work-visual-wrap"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
