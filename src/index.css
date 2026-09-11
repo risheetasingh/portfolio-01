@@ -180,6 +180,7 @@ body {
 .hero-headline {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 4px;
   width: 100%;
 }
@@ -187,6 +188,7 @@ body {
 .hero-headline-line {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: clamp(6px, 0.9vw, 10px);
   flex-wrap: wrap;
 }
