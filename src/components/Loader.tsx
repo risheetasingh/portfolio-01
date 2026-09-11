@@ -60,7 +60,7 @@ export default function Loader({ onComplete }: LoaderProps) {
         >
           <span style={{ position: 'relative', display: 'inline-block' }}>
             {quote.line2}
-            <span className="loader-cursor" style={{ color: '#e65f2e', position: 'absolute', left: '100%' }}>|</span>
+            <span className="loader-cursor" style={{ color: '#e60023', position: 'absolute', left: '100%' }}>|</span>
           </span>
         </motion.div>
       </div>
