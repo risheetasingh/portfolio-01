@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 
-const CURTAIN_DELAY = 0.15
-const CURTAIN_DURATION = 0.55
-const TOTAL_DURATION = (CURTAIN_DELAY + CURTAIN_DURATION) * 1000 + 150
+const CURTAIN_DELAY = 0.6
+const CURTAIN_DURATION = 0.8
+const TOTAL_DURATION = (CURTAIN_DELAY + CURTAIN_DURATION) * 1000 + 200
 
 interface LoaderProps {
   onComplete: () => void
@@ -53,7 +53,7 @@ export default function Loader({ onComplete }: LoaderProps) {
         className="loader-word"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.45, delay: 0.05, ease: [0.34, 1.56, 0.64, 1] }}
+        transition={{ duration: 0.5, delay: 0.1, ease: [0.34, 1.56, 0.64, 1] }}
       >
         Risheeta Singh
       </motion.span>
