@@ -14,6 +14,7 @@ import AxisB2C from './pages/AxisB2C'
 import AboutPage from './pages/AboutPage'
 import AetherFlowDemo from './pages/AetherFlowDemo'
 import Play from './pages/Play'
+import PlayTeaser from './components/PlayTeaser'
 import './App.css'
 
 type Theme = 'light' | 'dark'
@@ -32,6 +33,7 @@ function Portfolio({ theme, toggleTheme }: { theme: Theme; toggleTheme: () => vo
       <Hero theme={theme} />
       <Work />
       <About compact />
+      <PlayTeaser />
       <Contact />
     </motion.div>
   )
