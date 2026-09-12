@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Nav from '../components/Nav'
 import About from '../components/About'
+import PlayTeaser from '../components/PlayTeaser'
 import Contact from '../components/Contact'
 
 type Theme = 'light' | 'dark'
@@ -25,6 +26,7 @@ export default function AboutPage({ theme, toggleTheme }: Props) {
     >
       <Nav theme={theme} toggleTheme={toggleTheme} />
       <About />
+      <PlayTeaser />
       <Contact />
     </motion.div>
   )
