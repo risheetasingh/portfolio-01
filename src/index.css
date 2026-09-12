@@ -937,77 +937,29 @@ body {
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: #FAFCFD;
+  background: var(--bg);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0 clamp(24px, 8vw, 120px);
-  padding-bottom: 5vh;
+  overflow: hidden;
   cursor: pointer;
 }
 
-.loader-text {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 20px;
-  text-align: center;
+.loader-curtain {
+  position: absolute;
+  inset: 0;
+  background: #750608;
+  transform-origin: top;
 }
 
-.loader-line1 {
-  font-family: var(--mono);
-  font-size: clamp(20px, 5.5vw, 42px);
-  font-weight: 500;
-  line-height: 1.1;
-  color: #000000;
+.loader-word {
+  position: relative;
+  z-index: 1;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: clamp(28px, 6vw, 60px);
   letter-spacing: -0.02em;
-}
-
-.loader-line2 {
-  font-family: var(--mono);
-  font-size: clamp(20px, 5.5vw, 42px);
-  font-weight: 500;
-  line-height: 1.1;
-  color: #e60023;
-  letter-spacing: -0.02em;
-}
-
-.loader-cursor {
-  display: inline-block;
-  animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-.loader-indicator {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  opacity: 0.65;
-}
-
-.loader-percent {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: #555;
-  letter-spacing: 0.04em;
-}
-
-.loader-skip {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: #999;
-  letter-spacing: 0.02em;
-}
-
-.loader-spinner {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
+  color: #f7f6f3;
 }
 
 /* ── Hero (Full Screen) ────────────────────────── */
@@ -2664,6 +2616,92 @@ body {
 
   .art-teaser-strip {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Voxel Morph (coded doodle) ────────────────── */
+
+.voxel-morph {
+  position: relative;
+  z-index: 5;
+  width: min(92vw, 420px);
+  margin-top: 56px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(10, 10, 10, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.voxel-morph-canvas {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  cursor: grab;
+  touch-action: none;
+}
+
+.voxel-morph-canvas:active {
+  cursor: grabbing;
+}
+
+.voxel-morph-canvas canvas {
+  display: block;
+}
+
+.voxel-morph-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.voxel-morph-name {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: #f0f0ee;
+}
+
+.voxel-morph-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.voxel-morph-btn {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(240, 240, 238, 0.85);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.voxel-morph-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.voxel-morph-hint {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(240, 240, 238, 0.45);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .voxel-morph-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 }
 
