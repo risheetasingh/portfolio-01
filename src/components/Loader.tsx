@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
 
 const QUOTES = [
   { line1: "Designed with AI.", line2: "Directed by taste." },
   { line1: "Teaching machines to behave.", line2: "Politely." },
   { line1: "Give me a second.", line2: "Arranging pixels." },
 ]
+
+const TOTAL_DURATION = 900
 
 interface LoaderProps {
   onComplete: () => void
@@ -14,41 +16,58 @@ interface LoaderProps {
 export default function Loader({ onComplete }: LoaderProps) {
   const [quote] = useState(() => QUOTES[Math.floor(Math.random() * QUOTES.length)])
   const [percent, setPercent] = useState(0)
+  const doneRef = useRef(false)
+
+  const finish = () => {
+    if (doneRef.current) return
+    doneRef.current = true
+    onComplete()
+  }
 
   useEffect(() => {
-    const startDelay = setTimeout(() => {
-      const totalDuration = 1500
-      const steps = 100
-      const interval = totalDuration / steps
-      let current = 0
-      const timer = setInterval(() => {
-        current += 1
-        setPercent(current)
-        if (current >= 100) clearInterval(timer)
-      }, interval)
-      return () => clearInterval(timer)
-    }, 300)
+    const start = performance.now()
+    let raf: number
 
-    const completeTimer = setTimeout(onComplete, 2600)
+    const tick = (now: number) => {
+      const elapsed = now - start
+      const progress = Math.min(1, elapsed / TOTAL_DURATION)
+      setPercent(Math.round(progress * 100))
+      if (progress >= 1) {
+        finish()
+        return
+      }
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') finish()
+    }
+    window.addEventListener('keydown', onKey)
 
     return () => {
-      clearTimeout(startDelay)
-      clearTimeout(completeTimer)
+      cancelAnimationFrame(raf)
+      window.removeEventListener('keydown', onKey)
     }
-  }, [onComplete])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <motion.div
       className="loader"
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.6, ease: 'easeIn' }}
+      transition={{ duration: 0.35, ease: 'easeIn' }}
+      onClick={finish}
+      role="button"
+      aria-label="Skip loading animation"
+      tabIndex={0}
     >
       <div className="loader-text">
         <motion.div
           className="loader-line1"
           initial={{ opacity: 0, filter: 'blur(4px)' }}
           animate={{ opacity: 1, filter: 'blur(0px)' }}
-          transition={{ duration: 0.45, ease: 'easeOut', delay: 0 }}
+          transition={{ duration: 0.3, ease: 'easeOut', delay: 0 }}
         >
           {quote.line1}
         </motion.div>
@@ -56,7 +75,7 @@ export default function Loader({ onComplete }: LoaderProps) {
           className="loader-line2"
           initial={{ opacity: 0, filter: 'blur(4px)' }}
           animate={{ opacity: 1, filter: 'blur(0px)' }}
-          transition={{ duration: 0.45, ease: 'easeOut', delay: 0.45 }}
+          transition={{ duration: 0.3, ease: 'easeOut', delay: 0.2 }}
         >
           <span style={{ position: 'relative', display: 'inline-block' }}>
             {quote.line2}
@@ -76,6 +95,7 @@ export default function Loader({ onComplete }: LoaderProps) {
           <circle cx="7" cy="7" r="5.5" stroke="#aaa" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="20 15" />
         </motion.svg>
         <span className="loader-percent">Loading {String(percent).padStart(2, '0')}%</span>
+        <span className="loader-skip">(click to skip)</span>
       </div>
     </motion.div>
   )

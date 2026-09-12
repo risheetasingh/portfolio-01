@@ -39,10 +39,21 @@ function Portfolio({ theme, toggleTheme }: { theme: Theme; toggleTheme: () => vo
   )
 }
 
+const LOADER_SEEN_KEY = 'hasSeenLoader'
+
+function shouldShowLoader(pathname: string) {
+  if (pathname !== '/') return false
+  try {
+    return !localStorage.getItem(LOADER_SEEN_KEY)
+  } catch {
+    return true
+  }
+}
+
 function App() {
   const [theme, setTheme] = useState<Theme>('light')
-  const [loading, setLoading] = useState(true)
   const location = useLocation()
+  const [loading, setLoading] = useState(() => shouldShowLoader(location.pathname))
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -50,10 +61,19 @@ function App() {
 
   const toggleTheme = () => setTheme(t => t === 'light' ? 'dark' : 'light')
 
+  const dismissLoader = () => {
+    try {
+      localStorage.setItem(LOADER_SEEN_KEY, '1')
+    } catch {
+      // ignore storage errors (private browsing, etc.)
+    }
+    setLoading(false)
+  }
+
   return (
     <AnimatePresence mode="wait">
       {loading ? (
-        <Loader key="loader" onComplete={() => setLoading(false)} />
+        <Loader key="loader" onComplete={dismissLoader} />
       ) : (
         <motion.div
           key="app"
