@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { playLoaderSound } from '../lib/loaderSound'
+import { playLoaderSound, unlockLoaderSound, isLoaderSoundUnlocked } from '../lib/loaderSound'
 
 const HOLD_DELAY = 2500
 const DISSOLVE_DURATION = 950
@@ -29,6 +29,13 @@ interface LoaderProps {
 export default function Loader({ onComplete }: LoaderProps) {
   const doneRef = useRef(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [soundOn, setSoundOn] = useState(isLoaderSoundUnlocked)
+
+  const toggleSound = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    unlockLoaderSound()
+    setSoundOn(true)
+  }
 
   const finish = () => {
     if (doneRef.current) return
@@ -143,14 +150,38 @@ export default function Loader({ onComplete }: LoaderProps) {
       tabIndex={0}
     >
       <canvas ref={canvasRef} className="loader-curtain-canvas" />
-      <motion.span
-        className="loader-word"
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: [0, 0, 1, 1, 1], opacity: [0, 0, 1, 1, 0] }}
-        transition={{ duration: WORD_END / 1000, times: WORD_TIMES, ease: 'easeOut' }}
+      <div className="loader-center">
+        <motion.span
+          className="loader-word"
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: [0, 0, 1, 1, 1], opacity: [0, 0, 1, 1, 0] }}
+          transition={{ duration: WORD_END / 1000, times: WORD_TIMES, ease: 'easeOut' }}
+        >
+          Risheeta Singh
+        </motion.span>
+
+        <motion.button
+          className="loader-sound-toggle"
+          onClick={toggleSound}
+          aria-label={soundOn ? 'Sound on' : 'Tap to enable sound'}
+          aria-pressed={soundOn}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.15 }}
       >
-        Risheeta Singh
-      </motion.span>
+        {soundOn ? (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="5" y="11" width="14" height="9" rx="2" />
+            <path d="M8 11V8a4 4 0 0 1 7.2-2.4" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="5" y="11" width="14" height="9" rx="2" />
+            <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+          </svg>
+        )}
+        </motion.button>
+      </div>
     </motion.div>
   )
 }

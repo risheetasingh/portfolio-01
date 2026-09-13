@@ -26,6 +26,14 @@ function unlock() {
   })
 }
 
+export function unlockLoaderSound() {
+  unlock()
+}
+
+export function isLoaderSoundUnlocked() {
+  return unlocked
+}
+
 export function armLoaderSoundUnlock() {
   if (armed || typeof window === 'undefined') return
   armed = true
