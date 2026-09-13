@@ -5,7 +5,7 @@ const HOLD_DELAY = 600
 const DISSOLVE_DURATION = 750
 const TOTAL_DURATION = HOLD_DELAY + DISSOLVE_DURATION + 150
 const COLUMNS = 14
-const CURTAIN_COLOR = '#750608'
+const CURTAIN_COLOR = '#3d0304'
 
 interface LoaderProps {
   onComplete: () => void
@@ -43,7 +43,7 @@ export default function Loader({ onComplete }: LoaderProps) {
     ctx.fillStyle = CURTAIN_COLOR
     ctx.fillRect(0, 0, width, height)
 
-    // Sweep left -> right with a jagged, noisy edge rather than a straight line
+    // Sweep right -> left with a jagged, noisy edge rather than a straight line
     // or a fully random scatter: each block's erase priority is mostly driven
     // by its horizontal position, with enough per-block jitter to stagger the
     // boundary into an irregular, blocky front.
@@ -52,7 +52,7 @@ export default function Loader({ onComplete }: LoaderProps) {
       for (let c = 0; c < cols; c++) {
         const nx = c / cols
         const jitter = (Math.random() - 0.5) * 0.35
-        blocks.push({ x: c * blockSize, y: r * blockSize, priority: nx + jitter })
+        blocks.push({ x: c * blockSize, y: r * blockSize, priority: (1 - nx) + jitter })
       }
     }
     blocks.sort((a, b) => a.priority - b.priority)
