@@ -28,6 +28,7 @@ interface LoaderProps {
 export default function Loader({ onComplete }: LoaderProps) {
   const doneRef = useRef(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const audioRef = useRef<HTMLAudioElement>(null)
 
   const finish = () => {
     if (doneRef.current) return
@@ -111,6 +112,10 @@ export default function Loader({ onComplete }: LoaderProps) {
     }
 
     const holdTimer = setTimeout(() => {
+      // Autoplay-with-sound is blocked by browsers without a prior user
+      // gesture, so this can silently fail on first load - that's fine, the
+      // visual dissolve doesn't depend on it.
+      audioRef.current?.play().catch(() => {})
       raf = requestAnimationFrame(tick)
     }, HOLD_DELAY)
 
@@ -138,6 +143,7 @@ export default function Loader({ onComplete }: LoaderProps) {
       tabIndex={0}
     >
       <canvas ref={canvasRef} className="loader-curtain-canvas" />
+      <audio ref={audioRef} src="/loader-glitch.wav" preload="auto" />
       <motion.span
         className="loader-word"
         initial={{ scale: 0, opacity: 0 }}
