@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 
-const HOLD_DELAY = 600
-const DISSOLVE_DURATION = 1200
+const HOLD_DELAY = 1500
+const DISSOLVE_DURATION = 950
 const TOTAL_DURATION = HOLD_DELAY + DISSOLVE_DURATION + 150
 const COLUMNS = 10
 const CURTAIN_COLOR = '#3d0304'
