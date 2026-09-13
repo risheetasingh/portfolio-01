@@ -98,7 +98,13 @@
       "Bash(mkdir -p /c/Users/hp/AppData/Local/Temp/claude/C--Users-hp-portfolio-01/c397d0f5-d300-4e95-a4cc-40c394ba3a83/scratchpad)",
       "Bash(base64 -w0 public/risheeta.jpg)",
       "Bash(cat head.html risheeta_b64.txt tail.html)",
-      "Bash(cp \"C:/Users/hp/.claude/uploads/c397d0f5-d300-4e95-a4cc-40c394ba3a83/71300379-image.jpg\" \"C:/Users/hp/portfolio-01/public/risheeta-doodle.jpg\" && ls -la \"C:/Users/hp/portfolio-01/public/risheeta-doodle.jpg\")"
+      "Bash(cp \"C:/Users/hp/.claude/uploads/c397d0f5-d300-4e95-a4cc-40c394ba3a83/71300379-image.jpg\" \"C:/Users/hp/portfolio-01/public/risheeta-doodle.jpg\" && ls -la \"C:/Users/hp/portfolio-01/public/risheeta-doodle.jpg\")",
+      "Bash(curl -s https://risheetasingh.vercel.app/)",
+      "Bash(cat)",
+      "Bash(node /tmp_extract.js)",
+      "Bash(node \"C:/Users/hp/AppData/Local/Temp/claude/C--Users-hp-portfolio-01/37a7b178-bb61-4174-8046-8f9ee89df489/scratchpad/audio/extract.js\")",
+      "Bash(node \"C:/Users/hp/AppData/Local/Temp/claude/C--Users-hp-portfolio-01/37a7b178-bb61-4174-8046-8f9ee89df489/scratchpad/audio/extract2.js\")",
+      "Bash(git reset *)"
     ]
   }
 }
