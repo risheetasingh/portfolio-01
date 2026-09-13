@@ -945,11 +945,11 @@ body {
   cursor: pointer;
 }
 
-.loader-curtain {
+.loader-curtain-canvas {
   position: absolute;
   inset: 0;
-  background: #750608;
-  transform-origin: top;
+  width: 100%;
+  height: 100%;
 }
 
 .loader-word {
@@ -2624,9 +2624,9 @@ body {
 .voxel-morph {
   position: relative;
   z-index: 5;
-  width: min(92vw, 420px);
-  margin-top: 56px;
-  border-radius: 18px;
+  width: min(92vw, 460px);
+  margin-top: 64px;
+  border-radius: 20px;
   overflow: hidden;
   background: rgba(10, 10, 10, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -2635,11 +2635,40 @@ body {
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
 }
 
+.voxel-morph-header {
+  padding: 22px 24px 0;
+}
+
+.voxel-morph-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(240, 240, 238, 0.55);
+  margin-bottom: 8px;
+}
+
+.voxel-morph-caption {
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.5;
+  color: rgba(240, 240, 238, 0.75);
+  max-width: 46ch;
+}
+
 .voxel-morph-canvas {
+  position: relative;
   width: 100%;
   aspect-ratio: 4 / 3;
+  margin-top: 18px;
   cursor: grab;
   touch-action: none;
+}
+
+.voxel-morph-canvas-inner {
+  position: absolute;
+  inset: 0;
 }
 
 .voxel-morph-canvas:active {
@@ -2650,20 +2679,56 @@ body {
   display: block;
 }
 
-.voxel-morph-footer {
+.voxel-morph-expand-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 16px 20px;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: rgba(240, 240, 238, 0.85);
+  background: rgba(10, 10, 10, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.voxel-morph-expand-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: scale(1.06);
+}
+
+.voxel-morph-footer {
+  padding: 16px 24px 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+.voxel-morph-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
 .voxel-morph-name {
-  font-family: var(--mono);
-  font-size: 13px;
-  letter-spacing: 0.04em;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   color: #f0f0ee;
+}
+
+.voxel-morph-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(240, 240, 238, 0.5);
 }
 
 .voxel-morph-controls {
@@ -2683,6 +2748,7 @@ body {
   padding: 6px 12px;
   cursor: pointer;
   transition: background 0.2s ease;
+  flex-shrink: 0;
 }
 
 .voxel-morph-btn:hover {
@@ -2694,14 +2760,91 @@ body {
   font-size: 10px;
   letter-spacing: 0.04em;
   color: rgba(240, 240, 238, 0.45);
-  white-space: nowrap;
 }
 
 @media (max-width: 640px) {
-  .voxel-morph-footer {
+  .voxel-morph-controls {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 8px;
+  }
+}
+
+.voxel-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: rgba(6, 6, 6, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.voxel-modal {
+  position: relative;
+  width: min(92vw, 880px);
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(10, 10, 10, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+}
+
+.voxel-modal-canvas {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  cursor: grab;
+  touch-action: none;
+}
+
+.voxel-modal-canvas:active {
+  cursor: grabbing;
+}
+
+.voxel-modal-canvas canvas {
+  display: block;
+}
+
+.voxel-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #f0f0ee;
+  background: rgba(10, 10, 10, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.voxel-modal-close:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: scale(1.06) rotate(90deg);
+}
+
+.voxel-modal-footer {
+  padding: 18px 28px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+@media (max-width: 640px) {
+  .voxel-modal-backdrop {
+    padding: 16px;
+  }
+
+  .voxel-modal-canvas {
+    aspect-ratio: 4 / 3;
   }
 }
 
