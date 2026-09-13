@@ -59,37 +59,51 @@ export default function Loader({ onComplete }: LoaderProps) {
 
     // Sweep bottom-right -> top-left with a jagged, noisy edge rather than a
     // straight line or a fully random scatter: each block's erase priority is
-    // mostly driven by its diagonal position, with enough per-block jitter to
-    // stagger the boundary into an irregular, blocky front.
-    const blocks: { x: number; y: number; priority: number }[] = []
+    // mostly driven by its diagonal position, with a little per-block jitter
+    // to stagger the boundary into an irregular, blocky front (not too much,
+    // or the front reads as messy scatter instead of a clean diagonal sweep).
+    const BLOCK_TRANSITION = 110
+    const blocks: { x: number; y: number; priority: number; startTime: number }[] = []
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         const nx = c / cols
         const ny = r / rows
-        const jitter = (Math.random() - 0.5) * 0.6
-        blocks.push({ x: c * blockSize, y: r * blockSize, priority: (1 - nx) + (1 - ny) + jitter })
+        const jitter = (Math.random() - 0.5) * 0.3
+        blocks.push({ x: c * blockSize, y: r * blockSize, priority: (1 - nx) + (1 - ny) + jitter, startTime: 0 })
       }
     }
     blocks.sort((a, b) => a.priority - b.priority)
 
+    const spread = Math.max(1, DISSOLVE_DURATION - BLOCK_TRANSITION)
+    blocks.forEach((block, i) => {
+      block.startTime = (i / Math.max(1, blocks.length - 1)) * spread
+    })
+
     let raf: number
     let start: number | null = null
-    let erased = 0
 
-    const erase = (block: { x: number; y: number }) => {
-      ctx.clearRect(block.x, block.y, blockSize + 1, blockSize + 1)
+    const drawFrame = (elapsed: number) => {
+      ctx.clearRect(0, 0, width, height)
+      for (const block of blocks) {
+        const localProgress = Math.min(1, Math.max(0, (elapsed - block.startTime) / BLOCK_TRANSITION))
+        if (localProgress >= 1) continue
+        const scale = 1 - localProgress * 0.55
+        const w = blockSize * scale
+        const h = blockSize * scale
+        const cx = block.x + blockSize / 2
+        const cy = block.y + blockSize / 2
+        ctx.globalAlpha = 1 - localProgress
+        ctx.fillStyle = CURTAIN_COLOR
+        ctx.fillRect(cx - w / 2, cy - h / 2, w + 1, h + 1)
+      }
+      ctx.globalAlpha = 1
     }
 
     const tick = (now: number) => {
       if (start === null) start = now
       const elapsed = now - start
-      const progress = Math.min(1, elapsed / DISSOLVE_DURATION)
-      const targetCount = Math.floor(progress * blocks.length)
-      while (erased < targetCount) {
-        erase(blocks[erased])
-        erased++
-      }
-      if (progress < 1) {
+      drawFrame(elapsed)
+      if (elapsed < spread + BLOCK_TRANSITION) {
         raf = requestAnimationFrame(tick)
       } else {
         finish()
