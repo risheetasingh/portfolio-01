@@ -7,6 +7,7 @@ import Work from './components/Work'
 import About from './components/About'
 import Contact from './components/Contact'
 import Loader from './components/Loader'
+import { armLoaderSoundUnlock } from './lib/loaderSound'
 import AIHighlights from './pages/AIHighlights'
 import Jordy from './pages/Jordy'
 import Axis from './pages/Axis'
@@ -47,6 +48,10 @@ function App() {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
   }, [theme])
+
+  useEffect(() => {
+    armLoaderSoundUnlock()
+  }, [])
 
   const toggleTheme = () => setTheme(t => t === 'light' ? 'dark' : 'light')
 
