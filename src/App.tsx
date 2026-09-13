@@ -53,32 +53,25 @@ function App() {
   const dismissLoader = () => setLoading(false)
 
   return (
-    <AnimatePresence mode="wait">
-      {loading ? (
-        <Loader key="loader" onComplete={dismissLoader} />
-      ) : (
-        <motion.div
-          key="app"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-          style={{ minHeight: '100svh' }}
-        >
-          <AnimatePresence mode="wait">
-            <Routes location={location} key={location.pathname}>
-              <Route path="/" element={<Portfolio theme={theme} toggleTheme={toggleTheme} />} />
-              <Route path="/work/ai-highlights" element={<AIHighlights theme={theme} toggleTheme={toggleTheme} />} />
-              <Route path="/work/jordy" element={<Jordy theme={theme} toggleTheme={toggleTheme} />} />
-              <Route path="/work/axis" element={<Axis theme={theme} toggleTheme={toggleTheme} />} />
-              <Route path="/work/axis-b2c" element={<AxisB2C theme={theme} toggleTheme={toggleTheme} />} />
-              <Route path="/about" element={<AboutPage theme={theme} toggleTheme={toggleTheme} />} />
-              <Route path="/play" element={<Play theme={theme} toggleTheme={toggleTheme} />} />
-              <Route path="/demo/aether-flow" element={<AetherFlowDemo />} />
-            </Routes>
-          </AnimatePresence>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <>
+      <div style={{ minHeight: '100svh' }}>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<Portfolio theme={theme} toggleTheme={toggleTheme} />} />
+            <Route path="/work/ai-highlights" element={<AIHighlights theme={theme} toggleTheme={toggleTheme} />} />
+            <Route path="/work/jordy" element={<Jordy theme={theme} toggleTheme={toggleTheme} />} />
+            <Route path="/work/axis" element={<Axis theme={theme} toggleTheme={toggleTheme} />} />
+            <Route path="/work/axis-b2c" element={<AxisB2C theme={theme} toggleTheme={toggleTheme} />} />
+            <Route path="/about" element={<AboutPage theme={theme} toggleTheme={toggleTheme} />} />
+            <Route path="/play" element={<Play theme={theme} toggleTheme={toggleTheme} />} />
+            <Route path="/demo/aether-flow" element={<AetherFlowDemo />} />
+          </Routes>
+        </AnimatePresence>
+      </div>
+      <AnimatePresence>
+        {loading && <Loader key="loader" onComplete={dismissLoader} />}
+      </AnimatePresence>
+    </>
   )
 }
 

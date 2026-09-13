@@ -43,17 +43,19 @@ export default function Loader({ onComplete }: LoaderProps) {
     ctx.fillStyle = CURTAIN_COLOR
     ctx.fillRect(0, 0, width, height)
 
-    const blocks: { x: number; y: number }[] = []
+    // Sweep left -> right with a jagged, noisy edge rather than a straight line
+    // or a fully random scatter: each block's erase priority is mostly driven
+    // by its horizontal position, with enough per-block jitter to stagger the
+    // boundary into an irregular, blocky front.
+    const blocks: { x: number; y: number; priority: number }[] = []
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
-        blocks.push({ x: c * blockSize, y: r * blockSize })
+        const nx = c / cols
+        const jitter = (Math.random() - 0.5) * 0.35
+        blocks.push({ x: c * blockSize, y: r * blockSize, priority: nx + jitter })
       }
     }
-    // Fisher-Yates shuffle so blocks erase in a scattered, non-linear order
-    for (let i = blocks.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
-      ;[blocks[i], blocks[j]] = [blocks[j], blocks[i]]
-    }
+    blocks.sort((a, b) => a.priority - b.priority)
 
     let raf: number
     let start: number | null = null
