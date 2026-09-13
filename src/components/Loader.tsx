@@ -4,8 +4,15 @@ import { motion } from 'framer-motion'
 const HOLD_DELAY = 600
 const DISSOLVE_DURATION = 750
 const TOTAL_DURATION = HOLD_DELAY + DISSOLVE_DURATION + 150
-const COLUMNS = 14
+const COLUMNS = 10
 const CURTAIN_COLOR = '#3d0304'
+
+// Word timing: pop in, hold, then fade out right as the dissolve begins
+// (rather than lingering through the whole reveal).
+const WORD_POP_DELAY = 100
+const WORD_FADE_OUT = 250
+const WORD_END = HOLD_DELAY + WORD_FADE_OUT
+const WORD_TIMES: [number, number, number, number] = [0, WORD_POP_DELAY / WORD_END, HOLD_DELAY / WORD_END, 1]
 
 interface LoaderProps {
   onComplete: () => void
@@ -43,16 +50,17 @@ export default function Loader({ onComplete }: LoaderProps) {
     ctx.fillStyle = CURTAIN_COLOR
     ctx.fillRect(0, 0, width, height)
 
-    // Sweep right -> left with a jagged, noisy edge rather than a straight line
-    // or a fully random scatter: each block's erase priority is mostly driven
-    // by its horizontal position, with enough per-block jitter to stagger the
-    // boundary into an irregular, blocky front.
+    // Sweep bottom-right -> top-left with a jagged, noisy edge rather than a
+    // straight line or a fully random scatter: each block's erase priority is
+    // mostly driven by its diagonal position, with enough per-block jitter to
+    // stagger the boundary into an irregular, blocky front.
     const blocks: { x: number; y: number; priority: number }[] = []
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         const nx = c / cols
-        const jitter = (Math.random() - 0.5) * 0.35
-        blocks.push({ x: c * blockSize, y: r * blockSize, priority: (1 - nx) + jitter })
+        const ny = r / rows
+        const jitter = (Math.random() - 0.5) * 0.6
+        blocks.push({ x: c * blockSize, y: r * blockSize, priority: (1 - nx) + (1 - ny) + jitter })
       }
     }
     blocks.sort((a, b) => a.priority - b.priority)
@@ -112,8 +120,8 @@ export default function Loader({ onComplete }: LoaderProps) {
       <motion.span
         className="loader-word"
         initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.1, ease: [0.34, 1.56, 0.64, 1] }}
+        animate={{ scale: [0, 0, 1, 1], opacity: [0, 0, 1, 0] }}
+        transition={{ duration: WORD_END / 1000, times: WORD_TIMES, ease: 'easeOut' }}
       >
         Risheeta Singh
       </motion.span>
