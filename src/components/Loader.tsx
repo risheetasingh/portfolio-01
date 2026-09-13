@@ -1,18 +1,25 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 
-const HOLD_DELAY = 1500
+const HOLD_DELAY = 2500
 const DISSOLVE_DURATION = 950
 const TOTAL_DURATION = HOLD_DELAY + DISSOLVE_DURATION + 150
 const COLUMNS = 10
 const CURTAIN_COLOR = '#3d0304'
 
-// Word timing: pop in, hold, then fade out right as the dissolve begins
-// (rather than lingering through the whole reveal).
+// Word timing: pop in quickly, HOLD at full opacity so the name is actually
+// readable, then fade out right as the dissolve begins.
 const WORD_POP_DELAY = 100
+const WORD_POP_DURATION = 500
 const WORD_FADE_OUT = 250
 const WORD_END = HOLD_DELAY + WORD_FADE_OUT
-const WORD_TIMES: [number, number, number, number] = [0, WORD_POP_DELAY / WORD_END, HOLD_DELAY / WORD_END, 1]
+const WORD_TIMES: [number, number, number, number, number] = [
+  0,
+  WORD_POP_DELAY / WORD_END,
+  (WORD_POP_DELAY + WORD_POP_DURATION) / WORD_END,
+  HOLD_DELAY / WORD_END,
+  1,
+]
 
 interface LoaderProps {
   onComplete: () => void
@@ -120,7 +127,7 @@ export default function Loader({ onComplete }: LoaderProps) {
       <motion.span
         className="loader-word"
         initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: [0, 0, 1, 1], opacity: [0, 0, 1, 0] }}
+        animate={{ scale: [0, 0, 1, 1, 1], opacity: [0, 0, 1, 1, 0] }}
         transition={{ duration: WORD_END / 1000, times: WORD_TIMES, ease: 'easeOut' }}
       >
         Risheeta Singh
