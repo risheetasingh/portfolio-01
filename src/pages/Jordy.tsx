@@ -211,11 +211,11 @@ export default function Jordy({ theme, toggleTheme }: Props) {
       <Nav theme={theme} toggleTheme={toggleTheme} />
 
       {/* 1 — Hero */}
-      <motion.section className="cs-section cs-hero" custom={0} initial="hidden" animate="visible" variants={sectionVariants}>
+      <motion.section className="cs-section cs-hero" custom={0} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
         <p className="cs-eyebrow">Fantasy Football.AI · NSL · 2025</p>
         <h1 className="cs-title">Turning Live Sports Into<br/>Instant Stories</h1>
         <p className="cs-subtitle">Fans juggled four tabs to answer one question on game day. Jordy answers it in one message.</p>
-        <motion.div custom={1} initial="hidden" animate="visible" variants={sectionVariants}>
+        <motion.div custom={1} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
           <img src="/jordy-hero.png" alt="NSL website with Jordy AI assistant" className="cs-hero-img" />
         </motion.div>
         <div className="cs-meta" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
@@ -239,7 +239,7 @@ export default function Jordy({ theme, toggleTheme }: Props) {
       </motion.section>
 
       {/* 2 — The Problem */}
-      <motion.section className="cs-section" custom={2} initial="hidden" animate="visible" variants={sectionVariants}>
+      <motion.section className="cs-section" custom={2} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
         <p className="cs-section-label" style={{ color: AMBER }}>The problem</p>
         <h2 className="cs-heading">There's no structured way for fans to get live, contextual sports answers.</h2>
         <p className="cs-body-single">Fans are forced to juggle multiple apps, Twitter feeds, and stat sites to piece together a complete picture during game day. The information exists — but it's fragmented, slow, and impersonal.</p>
@@ -254,7 +254,7 @@ export default function Jordy({ theme, toggleTheme }: Props) {
       </motion.section>
 
       {/* 3 — Personas */}
-      <motion.section className="cs-section" custom={3} initial="hidden" animate="visible" variants={sectionVariants}>
+      <motion.section className="cs-section" custom={3} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
         <p className="cs-section-label" style={{ color: BLUE }}>Who it's for</p>
         <h2 className="cs-heading">Three fans, three very different goals.</h2>
         <p className="cs-body-single">Six interviews revealed three distinct archetypes. Designing for all three without fragmenting the experience was the central challenge.</p>
@@ -273,7 +273,7 @@ export default function Jordy({ theme, toggleTheme }: Props) {
       </motion.section>
 
       {/* 4 — Research */}
-      <motion.section className="cs-section" custom={4} initial="hidden" animate="visible" variants={sectionVariants}>
+      <motion.section className="cs-section" custom={4} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
         <p className="cs-section-label">What we learned</p>
         <h2 className="cs-heading">Investigating the unmet needs of chatbot users.</h2>
         <p className="cs-body-single">We combined user interviews, white paper research, and a competitive audit to map the gap between what fans want and what existing tools deliver.</p>
@@ -296,7 +296,7 @@ export default function Jordy({ theme, toggleTheme }: Props) {
       </motion.section>
 
       {/* 5 — The Decision */}
-      <motion.section className="cs-section" custom={5} initial="hidden" animate="visible" variants={sectionVariants}>
+      <motion.section className="cs-section" custom={5} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
         <p className="cs-section-label" style={{ color: BLUE }}>The decision</p>
         <h2 className="cs-heading">Three ways to answer. We bet on the riskiest one.</h2>
         <p className="cs-body-single">"Visuals beat text" was a finding, not a foregone conclusion — someone still had to decide how far to take it. Three response formats were tested against real questions.</p>
@@ -308,7 +308,7 @@ export default function Jordy({ theme, toggleTheme }: Props) {
       </motion.section>
 
       {/* 6 — Design System */}
-      <motion.section className="cs-section" custom={6} initial="hidden" animate="visible" variants={sectionVariants}>
+      <motion.section className="cs-section" custom={6} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
         <p className="cs-section-label">Built to scale</p>
         <h2 className="cs-heading">Building a theming architecture for multi-sport adaptability.</h2>
         <p className="cs-body-single">Expanding from one sport to multiple leagues created a problem: visual identity had to change without redesigning components. The solution was a two-layer system — components that know nothing about color, and tokens that know everything about the brand.</p>
@@ -377,7 +377,7 @@ export default function Jordy({ theme, toggleTheme }: Props) {
       </motion.section>
 
       {/* 7 — Outcome */}
-      <motion.section className="cs-section" custom={7} initial="hidden" animate="visible" variants={sectionVariants}>
+      <motion.section className="cs-section" custom={7} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
         <p className="cs-section-label" style={{ color: AMBER }}>Outcome</p>
         <h2 className="cs-heading">One question to Jordy replaced four tabs.</h2>
         <p style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.7, maxWidth: 640, marginTop: 16 }}>Users completed game-day decisions 60% faster — not because Jordy was faster to load, but because it reduced the number of queries needed to reach a decision.</p>
@@ -400,7 +400,7 @@ export default function Jordy({ theme, toggleTheme }: Props) {
       </motion.section>
 
       {/* 8 — What I'd do differently */}
-      <motion.section className="cs-section" custom={8} initial="hidden" animate="visible" variants={sectionVariants}>
+      <motion.section className="cs-section" custom={8} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
         <p className="cs-section-label" style={{ color: AMBER }}>What I'd do differently</p>
         <h2 className="cs-heading">Six interviews wasn't enough.</h2>
         <div className="cs-body-block">
@@ -410,14 +410,14 @@ export default function Jordy({ theme, toggleTheme }: Props) {
       </motion.section>
 
       {/* 9 — Closing */}
-      <motion.section className="cs-section cs-closing" custom={9} initial="hidden" animate="visible" variants={sectionVariants}>
+      <motion.section className="cs-section cs-closing" custom={9} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
         <p className="cs-closing-quote">
           "One question to Jordy replaced four tabs. That's the product."
         </p>
       </motion.section>
 
       {/* Next case study */}
-      <motion.section className="cs-section cs-next-project" custom={10} initial="hidden" animate="visible" variants={sectionVariants}>
+      <motion.section className="cs-section cs-next-project" custom={10} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
         <p className="cs-section-label">Next case study</p>
         <Link to="/work/ai-highlights" className="cs-next-link">
           <p className="cs-next-meta">Spectatr.ai · 2025</p>
