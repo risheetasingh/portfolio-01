@@ -1180,6 +1180,17 @@ body {
   margin-bottom: 64px;
 }
 
+/* Case study grids (many are set via inline gridTemplateColumns per
+   instance) don't collapse on their own on narrow screens - force every
+   grid inside a case study down to one column below 640px. The !important
+   is deliberate here: it's the only way to override a per-element inline
+   style from a stylesheet without touching every occurrence individually. */
+@media (max-width: 640px) {
+  .cs-page [style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* Meta block — MY ROLE / DURATION */
 .cs-meta {
   display: grid;
