@@ -104,7 +104,13 @@
       "Bash(node /tmp_extract.js)",
       "Bash(node \"C:/Users/hp/AppData/Local/Temp/claude/C--Users-hp-portfolio-01/37a7b178-bb61-4174-8046-8f9ee89df489/scratchpad/audio/extract.js\")",
       "Bash(node \"C:/Users/hp/AppData/Local/Temp/claude/C--Users-hp-portfolio-01/37a7b178-bb61-4174-8046-8f9ee89df489/scratchpad/audio/extract2.js\")",
-      "Bash(git reset *)"
+      "Bash(git reset *)",
+      "WebFetch(domain:help.figma.com)",
+      "WebFetch(domain:www.figanimations.com)",
+      "WebFetch(domain:framerwebsites.com)",
+      "WebFetch(domain:www.sitebuilderreport.com)",
+      "WebFetch(domain:reallygooddesigns.com)",
+      "WebFetch(domain:lovable.dev)"
     ]
   }
 }

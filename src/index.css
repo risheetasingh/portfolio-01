@@ -49,10 +49,6 @@
   scrollbar-color: #750608 transparent;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   font-family: var(--sans);
   font-weight: 500;
@@ -399,9 +395,10 @@ body {
 .work-right {
   width: 50%;
   position: sticky;
-  top: 64px;
-  height: calc(100svh - 64px);
-  padding: 32px 40px 32px 0;
+  top: 120px;
+  margin-top: 120px;
+  height: calc(100svh - 152px);
+  padding: 0 40px 32px 0;
   box-sizing: border-box;
 }
 
@@ -2319,7 +2316,10 @@ body {
   }
 
   .work-right {
-    padding: 24px 24px 24px 0;
+    top: 100px;
+    margin-top: 100px;
+    height: calc(100svh - 132px);
+    padding: 0 24px 32px 0;
   }
 
   .work-item-title {
